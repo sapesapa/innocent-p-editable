@@ -13,7 +13,11 @@
 <dom-module id="innocent-p-editable">
   <template>
     <style>
-      paper-input#input {
+       :host {
+        display: block;
+      }
+
+      #input {
         --paper-input-container-underline: {
           display: var(--underline-display);
         }
@@ -24,15 +28,11 @@
           display: var(--underline-display);
         }
       }
-
-       :host {
-        display: block;
-      }
     </style>
     <paper-input id="input" placeholder="{{placeholder}}" value="{{value}}">
-      <paper-icon-button id="editButton" suffix icon="editor:mode-edit" on-tap="_startEditMode" noink></paper-icon-button>
-      <paper-icon-button id="cancelButton" suffix icon="clear" on-tap="_endEditMode" noink></paper-icon-button>
-      <paper-icon-button id="doneButton" suffix icon="done" on-tap="_endEditMode" noink></paper-icon-button>
+      <paper-icon-button id="editButton" suffix icon="editor:mode-edit" alt="EDIT" on-tap="_startEditMode" noink></paper-icon-button>
+      <paper-icon-button id="cancelButton" suffix icon="clear" alt="CANCEL" on-tap="_endEditMode" noink></paper-icon-button>
+      <paper-icon-button id="doneButton" suffix icon="done" alt="DONE" on-tap="_endEditMode" noink></paper-icon-button>
     </paper-input>
   </template>
 
@@ -55,7 +55,7 @@
           type: String,
           value: ''
         },
-        _savedValue: {
+        _previousValue: {
           type: String,
           value: ''
         }
@@ -76,7 +76,7 @@
       },
 
       _startEditMode: function () {
-        this._savedValue = this.value;
+        this._previousValue = this.value;
         this.isEditMode = true;
       },
 
@@ -84,7 +84,7 @@
         let target = Polymer.dom(e).localTarget;
         switch (target.id) {
           case 'cancelButton':
-            this.value = this._savedValue;
+            this.value = this._previousValue;
           case 'doneButton':
             break;
           default:
