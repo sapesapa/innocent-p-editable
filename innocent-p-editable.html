@@ -1,0 +1,93 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../iron-icons/editor-icons.html">
+
+<!--
+`innocent-p-editable`
+&lt;innocent-p-editable&gt; is an editable text using the button to switch between read and edit mode.
+
+@demo demo/index.html
+-->
+
+<dom-module id="innocent-p-editable">
+  <template>
+    <style>
+      paper-input#input {
+        --paper-input-container-underline: {
+          display: var(--underline-display);
+        }
+        --paper-input-container-underline-focus: {
+          display: var(--underline-display);
+        }
+        --paper-input-container-underline-disabled: {
+          display: var(--underline-display);
+        }
+      }
+
+       :host {
+        display: block;
+      }
+    </style>
+    <paper-input id="input" placeholder="{{placeholder}}" readonly>
+      <paper-icon-button id="editBtn" suffix icon="editor:mode-edit" on-tap="_enterEditMode"></paper-icon-button>
+      <paper-icon-button id="cancelBtn" suffix icon="clear" on-tap="_endEditMode"></paper-icon-button>
+      <paper-icon-button id="doneBtn" suffix icon="done" on-tap="_endEditMode"></paper-icon-button>
+    </paper-input>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'innocent-p-editable',
+
+      properties: {
+        placeholder: {
+          type: String,
+          value: ''
+        },
+        isEditMode: {
+          type: Boolean,
+          value: false,
+          observer: '_toggleEditMode'
+        },
+        _savedValue: {
+          type: String,
+          value: ''
+        }
+      },
+
+      _toggleEditMode: function () {
+        let input = this.$.input;
+
+        input.readonly = !this.isEditMode;
+        this.$.editBtn.hidden = this.isEditMode;
+        this.$.cancelBtn.hidden = !this.isEditMode;
+        this.$.doneBtn.hidden = !this.isEditMode;
+
+        this.customStyle['--underline-display'] = this.isEditMode ? 'block' : 'none';
+        this.updateStyles();
+        if (this.isEditMode)
+          input.focus();
+      },
+
+      _enterEditMode: function () {
+        this._savedValue = this.$.input.value;
+        this.isEditMode = true;
+      },
+
+      _endEditMode: function (e) {
+        let target = Polymer.dom(e).localTarget;
+        switch (target.id) {
+          case 'cancelBtn':
+            this.$.input.value = this._savedValue;
+          case 'doneBtn':
+            break;
+          default:
+            console.error('Tapped source unknown');
+        }
+        this.isEditMode = false;
+      }
+    });
+  </script>
+</dom-module>
