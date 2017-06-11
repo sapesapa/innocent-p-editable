@@ -29,10 +29,10 @@
         display: block;
       }
     </style>
-    <paper-input id="input" placeholder="{{placeholder}}" readonly>
-      <paper-icon-button id="editButton" suffix icon="editor:mode-edit" on-tap="_enterEditMode"></paper-icon-button>
-      <paper-icon-button id="cancelButton" suffix icon="clear" on-tap="_endEditMode"></paper-icon-button>
-      <paper-icon-button id="doneButton" suffix icon="done" on-tap="_endEditMode"></paper-icon-button>
+    <paper-input id="input" placeholder="{{placeholder}}" value="{{value}}">
+      <paper-icon-button id="editButton" suffix icon="editor:mode-edit" on-tap="_startEditMode" noink></paper-icon-button>
+      <paper-icon-button id="cancelButton" suffix icon="clear" on-tap="_endEditMode" noink></paper-icon-button>
+      <paper-icon-button id="doneButton" suffix icon="done" on-tap="_endEditMode" noink></paper-icon-button>
     </paper-input>
   </template>
 
@@ -49,7 +49,11 @@
         isEditMode: {
           type: Boolean,
           value: false,
-          observer: '_toggleEditMode'
+          observer: '_toggleMode'
+        },
+        value: {
+          type: String,
+          value: ''
         },
         _savedValue: {
           type: String,
@@ -57,7 +61,7 @@
         }
       },
 
-      _toggleEditMode: function () {
+      _toggleMode: function () {
         let input = this.$.input;
 
         input.readonly = !this.isEditMode;
@@ -71,8 +75,8 @@
           input.focus();
       },
 
-      _enterEditMode: function () {
-        this._savedValue = this.$.input.value;
+      _startEditMode: function () {
+        this._savedValue = this.value;
         this.isEditMode = true;
       },
 
@@ -80,7 +84,7 @@
         let target = Polymer.dom(e).localTarget;
         switch (target.id) {
           case 'cancelButton':
-            this.$.input.value = this._savedValue;
+            this.value = this._savedValue;
           case 'doneButton':
             break;
           default:
