@@ -30,9 +30,9 @@
       }
     </style>
     <paper-input id="input" placeholder="{{placeholder}}" readonly>
-      <paper-icon-button id="editBtn" suffix icon="editor:mode-edit" on-tap="_enterEditMode"></paper-icon-button>
-      <paper-icon-button id="cancelBtn" suffix icon="clear" on-tap="_endEditMode"></paper-icon-button>
-      <paper-icon-button id="doneBtn" suffix icon="done" on-tap="_endEditMode"></paper-icon-button>
+      <paper-icon-button id="editButton" suffix icon="editor:mode-edit" on-tap="_enterEditMode"></paper-icon-button>
+      <paper-icon-button id="cancelButton" suffix icon="clear" on-tap="_endEditMode"></paper-icon-button>
+      <paper-icon-button id="doneButton" suffix icon="done" on-tap="_endEditMode"></paper-icon-button>
     </paper-input>
   </template>
 
@@ -61,9 +61,9 @@
         let input = this.$.input;
 
         input.readonly = !this.isEditMode;
-        this.$.editBtn.hidden = this.isEditMode;
-        this.$.cancelBtn.hidden = !this.isEditMode;
-        this.$.doneBtn.hidden = !this.isEditMode;
+        this.$.editButton.hidden = this.isEditMode;
+        this.$.cancelButton.hidden = !this.isEditMode;
+        this.$.doneButton.hidden = !this.isEditMode;
 
         this.customStyle['--underline-display'] = this.isEditMode ? 'block' : 'none';
         this.updateStyles();
@@ -79,9 +79,9 @@
       _endEditMode: function (e) {
         let target = Polymer.dom(e).localTarget;
         switch (target.id) {
-          case 'cancelBtn':
+          case 'cancelButton':
             this.$.input.value = this._savedValue;
-          case 'doneBtn':
+          case 'doneButton':
             break;
           default:
             console.error('Tapped source unknown');
